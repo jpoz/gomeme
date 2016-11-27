@@ -11,10 +11,12 @@ go get github.com/jpoz/gomeme/cmd/gomeme
 ## Usage
 
 ```shell
-Usage: ./gomeme [options] input.gif output.gif
+Usage: gomeme [options] input.gif output.gif
 
   -b string
         Bottom text of the meme.
+  -f string
+        TrueType font path. Default is Hack-Bold.ttf
   -fs float
         Font size of the text (default 42)
   -m int
@@ -30,7 +32,7 @@ Usage: ./gomeme [options] input.gif output.gif
 ## Example
 
 ```shell
-gomeme -t "I am meme" -b "What are you?" input.gif output.gif
+gomeme -t "Whatup internet?" -b "How you doing?" input.gif output.gif
 ```
 
-![output](https://cloud.githubusercontent.com/assets/12866/20644884/876f1740-b3fc-11e6-9718-15d7d69791a4.gif)
+![output](https://cloud.githubusercontent.com/assets/12866/20652316/e2555930-b4ab-11e6-9148-84e6bf0fc9d9.gif)
