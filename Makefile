@@ -13,7 +13,7 @@ SOURCES := $(shell find $(SOURCEDIR) -name '*.go')
 .DEFAULT_GOAL: $(BINARY)
 
 $(BINARY): $(SOURCES)
-	go build ${LDFLAGS} -o ${BINARY} main.go
+	go build ${LDFLAGS} -o ${BINARY} cmd/gomeme/gomeme.go
 
 .PHONY: install
 install:
@@ -22,3 +22,7 @@ install:
 .PHONY: clean
 clean:
 	if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi
+
+.PHONY: assets
+assets:
+	go-bindata -pkg gomeme Hack-Bold.ttf
