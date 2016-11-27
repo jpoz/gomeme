@@ -8,7 +8,7 @@ REPO=github.com/jpoz/gomeme
 LDFLAGS=-ldflags "-X ${REPO}/core.Version=${VERSION} -X ${REPO}/core.BuildTime=${BUILD_TIME}"
 
 SOURCEDIR=.
-SOURCES := $(shell find $(SOURCEDIR) -name '*.go')
+SOURCES := $(shell find $(SOURCEDIR) -name '**/*.go')
 
 .DEFAULT_GOAL: $(BINARY)
 
