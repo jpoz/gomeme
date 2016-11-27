@@ -6,7 +6,6 @@ import (
 	"image/draw"
 	"image/gif"
 	"io"
-	"math"
 
 	"golang.org/x/image/font"
 	"golang.org/x/image/math/fixed"
@@ -95,28 +94,26 @@ func (m *Meme) build() {
 	}
 }
 
-func (m *Meme) drawer() *font.Drawer {
-	return &font.Drawer{
-		Src: m.FontColor,
-		Face: truetype.NewFace(m.Font, &truetype.Options{
-			Size:    m.FontSize,
-			DPI:     m.FontDPI,
-			Hinting: font.HintingNone,
-		}),
-	}
-}
-
 func (m *Meme) textImage() *image.RGBA {
 	bounds := m.GIF.Image[0].Bounds()
 	textImage := image.NewRGBA(image.Rect(0, 0, bounds.Dx(), bounds.Dy()))
-
-	d := m.drawer()
-
-	d.Dst = textImage
+	f := truetype.NewFace(m.Font, &truetype.Options{
+		Size:    m.FontSize,
+		DPI:     m.FontDPI,
+		Hinting: font.HintingNone,
+	})
+	d := &font.Drawer{
+		Dst:  textImage,
+		Src:  m.FontColor,
+		Face: f,
+	}
 
 	if m.TopText != "" {
 		// Compute the top text position
-		y := m.Margin + int(math.Ceil(m.FontSize*m.FontDPI/m.FontDPI))
+		metrics := f.Metrics()
+		ascent := metrics.Ascent.Floor()
+		height := metrics.Height.Floor()
+		y := m.Margin + ascent + (ascent - height)
 		x := (fixed.I(bounds.Dx()) - d.MeasureString(m.TopText)) / 2
 		topDot := fixed.Point26_6{
 			X: x,
@@ -130,7 +127,7 @@ func (m *Meme) textImage() *image.RGBA {
 
 	if m.BottomText != "" {
 		// Compute the bottom text position
-		y := bounds.Dy() - (m.Margin + int(math.Ceil(m.FontSize*m.FontDPI/m.FontDPI)))
+		y := bounds.Dy() - m.Margin
 		x := (fixed.I(bounds.Dx()) - d.MeasureString(m.BottomText)) / 2
 		bottomDot := fixed.Point26_6{
 			X: x,
