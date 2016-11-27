@@ -33,4 +33,4 @@ Usage: ./gomeme [options] input.gif output.gif
 gomeme -t "I am meme" -b "What are you?" input.gif output.gif
 ```
 
-![output](https://cloud.githubusercontent.com/assets/12866/20644852/9dd55a7c-b3fb-11e6-8b88-4bcf0306afa7.gif)
+![output](https://cloud.githubusercontent.com/assets/12866/20644884/876f1740-b3fc-11e6-9718-15d7d69791a4.gif)

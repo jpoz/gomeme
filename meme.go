@@ -51,10 +51,10 @@ type Meme struct {
 // default configureations.
 func NewMeme() (*Meme, error) {
 	meme := &Meme{
-		FontColor:       image.Black,
+		FontColor:       image.White,
 		FontDPI:         DefaultDPI,
 		FontSize:        DefaultFontSize,
-		FontStrokeColor: color.White,
+		FontStrokeColor: color.Black,
 		FontStrokeSize:  DefaultStrokeSize,
 		Margin:          DefaultMargin,
 	}
@@ -108,11 +108,12 @@ func (m *Meme) textImage() *image.RGBA {
 		Face: f,
 	}
 
+	metrics := f.Metrics()
+	ascent := metrics.Ascent.Floor()
+	height := metrics.Height.Floor()
+
 	if m.TopText != "" {
 		// Compute the top text position
-		metrics := f.Metrics()
-		ascent := metrics.Ascent.Floor()
-		height := metrics.Height.Floor()
 		y := m.Margin + ascent + (ascent - height)
 		x := (fixed.I(bounds.Dx()) - d.MeasureString(m.TopText)) / 2
 		topDot := fixed.Point26_6{
@@ -127,7 +128,7 @@ func (m *Meme) textImage() *image.RGBA {
 
 	if m.BottomText != "" {
 		// Compute the bottom text position
-		y := bounds.Dy() - m.Margin
+		y := bounds.Dy() - m.Margin - (height - ascent)
 		x := (fixed.I(bounds.Dx()) - d.MeasureString(m.BottomText)) / 2
 		bottomDot := fixed.Point26_6{
 			X: x,
