@@ -118,12 +118,14 @@ func (m *Meme) textImage() *image.RGBA {
 
 	// Not sure if these are the best metrics for the margin calculations
 	metrics := f.Metrics()
-	ascent := metrics.Ascent.Floor()
-	height := metrics.Height.Floor()
+	ascent := metrics.Ascent.Ceil()
+	descent := metrics.Descent.Ceil()
+	// Maybe height should be used?
+	//height := metrics.Height.Ceil()
 
 	if m.TopText != "" {
 		// Compute the top text position
-		y := m.Margin + ascent + (ascent - height)
+		y := m.Margin + ascent
 		x := (fixed.I(bounds.Dx()) - d.MeasureString(m.TopText)) / 2
 		topDot := fixed.Point26_6{
 			X: x,
@@ -137,7 +139,7 @@ func (m *Meme) textImage() *image.RGBA {
 
 	if m.BottomText != "" {
 		// Compute the bottom text position
-		y := bounds.Dy() - m.Margin - (height-ascent)*3
+		y := bounds.Dy() - m.Margin - descent
 		x := (fixed.I(bounds.Dx()) - d.MeasureString(m.BottomText)) / 2
 		bottomDot := fixed.Point26_6{
 			X: x,
