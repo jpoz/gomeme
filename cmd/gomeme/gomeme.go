@@ -19,12 +19,13 @@ func main() {
 		flag.PrintDefaults()
 	}
 
-	flag.StringVar(&meme.TopText, "t", "", "Top text of the meme.")
-	flag.StringVar(&meme.BottomText, "b", "", "Bottom text of the meme.")
-	flag.IntVar(&meme.Margin, "m", gomeme.DefaultMargin, "Margin around the text")
+	flag.BoolVar(&verbose, "v", false, "Displays more information.")
 	flag.Float64Var(&meme.FontSize, "fs", gomeme.DefaultFontSize, "Font size of the text")
 	flag.IntVar(&meme.FontStrokeSize, "ss", gomeme.DefaultStrokeSize, "Stroke size around the text")
-	flag.BoolVar(&verbose, "v", false, "Displays more information.")
+	flag.IntVar(&meme.Margin, "m", gomeme.DefaultMargin, "Margin around the text")
+	flag.StringVar(&meme.BottomText, "b", "", "Bottom text of the meme.")
+	flag.StringVar(&meme.FontPath, "f", "", "TrueType font path. Default is Hack-Bold.ttf")
+	flag.StringVar(&meme.TopText, "t", "", "Top text of the meme.")
 
 	flag.Parse()
 

@@ -6,11 +6,11 @@ import (
 	"image/draw"
 	"image/gif"
 	"io"
+	"io/ioutil"
 
 	"golang.org/x/image/font"
 	"golang.org/x/image/math/fixed"
 
-	"github.com/disintegration/imaging"
 	"github.com/golang/freetype/truetype"
 	"github.com/jpoz/dilation"
 )
@@ -31,7 +31,7 @@ const DefaultStrokeSize = 4
 // Meme comprises of all things needed to create a new
 // meme from a gif
 type Meme struct {
-	Font            *truetype.Font
+	FontPath        string
 	FontSize        float64
 	FontDPI         float64
 	FontColor       image.Image
@@ -43,6 +43,7 @@ type Meme struct {
 	TopText    string
 	BottomText string
 
+	Font   *truetype.Font
 	GIF    *gif.GIF
 	Bounds image.Rectangle
 }
@@ -58,18 +59,6 @@ func NewMeme() (*Meme, error) {
 		FontStrokeSize:  DefaultStrokeSize,
 		Margin:          DefaultMargin,
 	}
-	var err error
-
-	var fontData []byte
-	fontData, err = Asset("Hack-Bold.ttf")
-	if err != nil {
-		return meme, err
-	}
-
-	meme.Font, err = truetype.Parse(fontData)
-	if err != nil {
-		return meme, err
-	}
 
 	return meme, nil
 }
@@ -83,15 +72,34 @@ func (m Meme) Write(w io.Writer) error {
 
 // Build will take the current settings of the Meme and updates the GIF
 func (m *Meme) build() {
-	bounds := m.GIF.Image[0].Bounds()
+	m.loadFont()
 	textImage := m.textImage()
 
 	// Write on gif
+	// TODO: Break this out on each CPU
 	for _, img := range m.GIF.Image {
-		newFrame := imaging.Overlay(img, textImage, image.Pt(0, 0), 1.0)
-		bnds := img.Bounds()
-		draw.Draw(img, bnds, newFrame, bounds.Min, draw.Src)
+		draw.DrawMask(img, img.Bounds(), textImage, image.ZP, textImage, image.ZP, draw.Over)
 	}
+}
+
+func (m *Meme) loadFont() error {
+	var err error
+	var fontData []byte
+
+	if m.FontPath == "" {
+		fontData, err = Asset("Hack-Bold.ttf")
+		if err != nil {
+			return err
+		}
+	} else {
+		fontData, err = ioutil.ReadFile(m.FontPath)
+		if err != nil {
+			return err
+		}
+	}
+
+	m.Font, err = truetype.Parse(fontData)
+	return err
 }
 
 func (m *Meme) textImage() *image.RGBA {
@@ -108,6 +116,7 @@ func (m *Meme) textImage() *image.RGBA {
 		Face: f,
 	}
 
+	// Not sure if these are the best metrics for the margin calculations
 	metrics := f.Metrics()
 	ascent := metrics.Ascent.Floor()
 	height := metrics.Height.Floor()
@@ -128,7 +137,7 @@ func (m *Meme) textImage() *image.RGBA {
 
 	if m.BottomText != "" {
 		// Compute the bottom text position
-		y := bounds.Dy() - m.Margin - (height - ascent)
+		y := bounds.Dy() - m.Margin - (height-ascent)*3
 		x := (fixed.I(bounds.Dx()) - d.MeasureString(m.BottomText)) / 2
 		bottomDot := fixed.Point26_6{
 			X: x,
@@ -140,6 +149,7 @@ func (m *Meme) textImage() *image.RGBA {
 		d.DrawString(m.BottomText)
 	}
 
+	// Dialate aka give text a stroke
 	dilation.Dialate(textImage, dilation.DialateConfig{
 		Stroke:      m.FontStrokeSize,
 		StrokeColor: m.FontStrokeColor,
