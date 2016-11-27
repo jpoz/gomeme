@@ -2,6 +2,12 @@
 
 Take a gif, make a meme. Written in Go (Golang)
 
+## Installation
+
+```
+go get github.com/jpoz/gomeme/cmd/gomeme
+```
+
 ## Usage
 
 ```shell
