@@ -1,11 +1,11 @@
 BINARY=gomeme
 
-VERSION=1.0.0
+VERSION=1.0.1
 BUILD_TIME=`date +%FT%T%z`
 
 REPO=github.com/jpoz/gomeme
 
-LDFLAGS=-ldflags "-X ${REPO}/core.Version=${VERSION} -X ${REPO}/core.BuildTime=${BUILD_TIME}"
+LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}"
 
 SOURCEDIR=.
 SOURCES := $(shell find $(SOURCEDIR) -name '**/*.go')

@@ -78,7 +78,7 @@ func (m *Meme) build() {
 	// Write on gif
 	// TODO: Break this out on each CPU
 	for _, img := range m.GIF.Image {
-		draw.DrawMask(img, img.Bounds(), textImage, image.ZP, textImage, image.ZP, draw.Over)
+		draw.DrawMask(img, textImage.Bounds(), textImage, image.ZP, textImage, image.ZP, draw.Over)
 	}
 }
 
