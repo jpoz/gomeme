@@ -25,4 +25,4 @@ clean:
 
 .PHONY: assets
 assets:
-	go-bindata -pkg gomeme Hack-Bold.ttf
+	go-bindata -pkg gomeme inpact.ttf

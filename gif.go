@@ -87,7 +87,7 @@ func (m *Meme) loadFont() error {
 	var fontData []byte
 
 	if m.FontPath == "" {
-		fontData, err = Asset("Hack-Bold.ttf")
+		fontData, err = Asset("inpact.ttf")
 		if err != nil {
 			return err
 		}
