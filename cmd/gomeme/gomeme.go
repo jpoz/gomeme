@@ -17,8 +17,7 @@ var BuildTime string
 
 func main() {
 	var verbose bool
-	meme, err := gomeme.NewMeme()
-	check(err)
+	config := gomeme.NewConfig()
 
 	flag.Usage = func() {
 		fmt.Printf("Usage: %s [options] input.gif output.gif\nv%s (%s)\n\n",
@@ -30,17 +29,18 @@ func main() {
 	}
 
 	flag.BoolVar(&verbose, "v", false, "Displays more information.")
-	flag.Float64Var(&meme.FontSize, "fs", gomeme.DefaultFontSize, "Font size of the text")
-	flag.IntVar(&meme.FontStrokeSize, "ss", gomeme.DefaultStrokeSize, "Stroke size around the text")
-	flag.IntVar(&meme.Margin, "m", gomeme.DefaultMargin, "Margin around the text")
-	flag.StringVar(&meme.BottomText, "b", "", "Bottom text of the meme.")
-	flag.StringVar(&meme.FontPath, "f", "", "TrueType font path. (optional)")
-	flag.StringVar(&meme.TopText, "t", "", "Top text of the meme.")
+	flag.Float64Var(&config.FontSize, "fs", gomeme.DefaultFontSize, "Font size of the text")
+	flag.IntVar(&config.FontStrokeSize, "ss", gomeme.DefaultStrokeSize, "Stroke size around the text")
+	flag.IntVar(&config.Margin, "m", gomeme.DefaultMargin, "Margin around the text")
+	flag.StringVar(&config.BottomText, "b", "", "Bottom text of the config.")
+	flag.StringVar(&config.FontPath, "f", "", "TrueType font path. (optional)")
+	flag.StringVar(&config.TopText, "t", "", "Top text of the config.")
 
 	flag.Parse()
 
 	if verbose {
-		fmt.Println(meme)
+		// TODO make this output better
+		fmt.Println(config)
 	}
 
 	if flag.NArg() < 2 {
@@ -52,9 +52,14 @@ func main() {
 		fail("Could not open input", err)
 	}
 
-	meme.GIF, err = gif.DecodeAll(in)
+	g, err := gif.DecodeAll(in)
 	if err != nil {
 		fail("Failed to decode gif", err)
+	}
+
+	meme := &gomeme.Meme{
+		Config:   config,
+		Memeable: gomeme.GIF{g},
 	}
 
 	out, err := os.Create(flag.Arg(1))
