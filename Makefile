@@ -1,11 +1,8 @@
 BINARY=gomeme
 
-VERSION=1.0.1
-BUILD_TIME=`date +%FT%T%z`
+VERSION=1.1.0
 
 REPO=github.com/jpoz/gomeme
-
-LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}"
 
 SOURCEDIR=.
 SOURCES := $(shell find $(SOURCEDIR) -name '**/*.go')
@@ -13,7 +10,7 @@ SOURCES := $(shell find $(SOURCEDIR) -name '**/*.go')
 .DEFAULT_GOAL: $(BINARY)
 
 $(BINARY): $(SOURCES)
-	go build ${LDFLAGS} -o ${BINARY} cmd/gomeme/gomeme.go
+	go build -o ${BINARY} cmd/gomeme/gomeme.go
 
 .PHONY: install
 install:

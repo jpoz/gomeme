@@ -14,21 +14,17 @@ import (
 	"github.com/jpoz/gomeme"
 )
 
-// Version of gomeme set by ldflags
-var Version string
-
-// BuildTime is when gomeme was built
-var BuildTime string
+// Version of gomeme
+var Version = "1.1.0"
 
 func main() {
 	var verbose bool
 	config := gomeme.NewConfig()
 
 	flag.Usage = func() {
-		fmt.Printf("Usage: %s [options] input.gif output.gif\nv%s (%s)\n\n",
+		fmt.Printf("Usage: %s [options] input.gif output.gif\nv%s\n\n",
 			os.Args[0],
 			Version,
-			BuildTime,
 		)
 		flag.PrintDefaults()
 	}
