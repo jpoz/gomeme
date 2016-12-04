@@ -1,6 +1,6 @@
 # gomeme
 
-Take a gif, make a meme. Written in Go (Golang)
+Take a gif/jpeg/png, make a meme. Written in Go (Golang)
 
 ## Installation
 
