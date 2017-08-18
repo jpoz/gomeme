@@ -5,7 +5,7 @@ Take a gif/jpeg/png, make a meme. Written in Go (Golang)
 ## Installation
 
 ```
-go get github.com/jpoz/gomeme/cmd/gomeme
+go get -u github.com/jpoz/gomeme/cmd/gomeme
 ```
 
 ## Usage
