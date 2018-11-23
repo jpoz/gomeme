@@ -5,6 +5,7 @@ import (
 	"image/draw"
 	"image/gif"
 	"io"
+	"sync"
 )
 
 // GIF comprises of all things needed to create a new
@@ -20,10 +21,21 @@ func (g GIF) Bounds() image.Rectangle {
 
 // Write GIF to writer
 func (g GIF) Write(textImage *image.RGBA, w io.Writer) error {
-	// TODO: Break this out on each CPU
-	for _, img := range g.GIF.Image {
-		draw.DrawMask(img, textImage.Bounds(), textImage, image.ZP, textImage, image.ZP, draw.Over)
+	var g2 gif.GIF
+	g2 = *g.GIF
+	var wg sync.WaitGroup
+	wg.Add(len(g2.Image))
+	frames := make([]*image.Paletted, len(g2.Image))
+	for i, img := range g2.Image {
+		go func(i int, img *image.Paletted) {
+			img2 := image.NewPaletted(img.Bounds(), img.Palette)
+			draw.Draw(img2, img2.Bounds(), img, image.ZP, draw.Src)
+			draw.DrawMask(img2, textImage.Bounds(), textImage, image.ZP, textImage, image.ZP, draw.Over)
+			frames[i] = img2
+			wg.Done()
+		}(i, img)
 	}
-
-	return gif.EncodeAll(w, g.GIF)
+	wg.Wait()
+	g2.Image = frames
+	return gif.EncodeAll(w, &g2)
 }
