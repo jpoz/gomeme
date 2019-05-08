@@ -11,7 +11,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/jpoz/gomeme"
+	"github.com/peterebden/gomeme"
 )
 
 // Version of gomeme
