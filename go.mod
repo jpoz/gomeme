@@ -1,4 +1,4 @@
-module github.com/koalalorenzo/gomeme
+module gitlab.com/koalalorenzo/gomeme
 
 go 1.17
 

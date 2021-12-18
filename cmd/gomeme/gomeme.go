@@ -11,7 +11,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/koalalorenzo/gomeme"
+	"gitlab.com/koalalorenzo/gomeme"
 	"golang.org/x/image/webp"
 )
 
