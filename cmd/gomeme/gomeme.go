@@ -11,7 +11,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/peterebden/gomeme"
+	"github.com/koalalorenzo/gomeme"
+	"golang.org/x/image/webp"
 )
 
 // Version of gomeme
@@ -79,6 +80,12 @@ func main() {
 			fail("Failed to decode png", err)
 		}
 		meme.Memeable = gomeme.PNG{p}
+	case "image/webp":
+		i, err := webp.Decode(buff)
+		if err != nil {
+			fail("Failed to decode webp", err)
+		}
+		meme.Memeable = gomeme.WebP{i}
 	default:
 		fail(fmt.Sprintf("No idea what todo with a %s", contentType), nil)
 	}
