@@ -9,7 +9,6 @@ import (
 	"golang.org/x/image/math/fixed"
 
 	"github.com/golang/freetype/truetype"
-	"github.com/jpoz/dilation"
 )
 
 // DefaultFontSize is the default size of the font
@@ -128,11 +127,6 @@ func (c *Config) TextImage(bounds image.Rectangle) (*image.RGBA, error) {
 		d.DrawString(c.BottomText)
 	}
 
-	// Dialate aka give text a stroke
-	dilation.Dialate(textImage, dilation.DialateConfig{
-		Stroke:      c.FontStrokeSize,
-		StrokeColor: c.FontStrokeColor,
-	})
-
-	return textImage, nil
+	// Give text an outline
+	return outline(textImage, c.FontStrokeSize, c.FontStrokeColor), nil
 }

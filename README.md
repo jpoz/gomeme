@@ -1,11 +1,14 @@
 # gomeme
 
-Take a gif/jpeg/png, make a meme. Written in Go (Golang)
+Take a gif/jpeg/png/webp, make a meme. Written in Go (Golang)
+
+Forked from: [peterebden/gomeme](https://github.com/peterebden/gomeme) and 
+[jpoz/gomeme](https://github.com/jpoz/gomeme)
 
 ## Installation
 
 ```
-go get -u github.com/jpoz/gomeme/cmd/gomeme
+go get -u gitlab.com/koalalorenzo/gomeme/cmd/gomeme
 ```
 
 ## Usage
